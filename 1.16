@@ -1,0 +1,28 @@
+
+
+#include "pch.h"
+#include <iostream>
+#include<stdio.h>
+
+void com(int *p1, int *p2)
+{
+	int i;
+	if (*p1 < *p2)
+	{
+		i = *p1;
+		*p1 = *p2;
+		*p2 = i;
+	}
+}
+
+int main()
+{
+	int i, j, k;
+	scanf_s("%d %d %d", &i, &j, &k);
+	com(&i, &j);
+	com(&i, &k);
+	com(&j, &k);
+	printf("%d\t%d\t%d\n", i, j, k);
+}
+
+
