@@ -1,0 +1,113 @@
+约瑟夫环实习报告
+U201813491 |  1809
+范诗榜 | 数据结构 | 3.25?
+一．需求分析
+1.利用单循环列表结构模拟此过程，按照出列的顺序印出各人的编号。
+2.演示程序以用户和计算机的对话方式执行，即在计算机上显示“提示信息”之后，由用户在键盘上输入演示程序中规定的运算命令；相应的输入数据和运算结构显示在其后。
+3.程序执行的命令包括：
+1）输入报数上限值； 2）输入人数以及所持密码； 3）输出出列顺序； 4）结束
+4.测试数据
+M初值为20；n=7；七个人的密码依次为：3，1，7，2，4，8，4，首先m的值为6（正确的输出顺序应为6，1，4，7，2，3，5）
+二．概要设计
+为实现上述程序功能，需建立单项循环链表以存储此结构。为此，需要一个抽象数据结构类型。
+1.	链表结点的抽象数据类型定义为：
+ADT
+2.	本程序包括三个主要核心代码功能：
+1）	主函数模块
+2）	循环链表的创建模块
+3）	出列操作的模块
+三．详细设计
+#include"pch.h"
+#include <stdio.h>
+#include<stdlib.h>
+
+/*#define N 7*/
+#define OVERFLOW 0				
+/*int Key[N] = { 3, 1, 7, 2, 4, 8, 4};*/
+
+typedef struct LNODE					//定义循环链表
+{
+	int num;
+	int key;
+	struct LNODE *next;
+}LNODE, *Linklist;
+
+void joseph(Linklist p, int m, int x, int max)		//创建约瑟夫环函数
+{
+	Linklist q;
+	q = (Linklist)malloc(sizeof(LNODE));
+	int i;
+	if (x == 0 || m > max)
+	{
+		return;
+	}
+	q = p;
+	m %= x;
+	if (m == 0)
+	{
+		m = x;
+	}
+	for (i = 1; i <= m; ++i)				//查找出去的结点
+	{
+		p = q;
+		q = p->next;
+	}
+	p->next = q->next;
+	i = q->key;
+	printf("The out is %d\n", q->num);
+	free(q);
+	joseph(p, i, x - 1, max);
+}
+
+int main()
+{
+	int i, m, max, N;
+	Linklist Lh, p, q;
+	Lh = (Linklist)malloc(sizeof(LNODE));			//创建空链表
+	printf("The Max is :\n");
+	scanf_s("%d", &max);
+	m = max;
+	printf("the num of peo N;");
+	scanf_s("%d", &N);
+	if (!Lh)
+	{
+		return OVERFLOW;
+	}
+	scanf_s("%d", &(Lh->key));
+	Lh->num = 1; 
+	Lh->next = NULL; 
+	p = Lh;
+	for (i = 1; i < N; i++)
+	{
+
+		if (!(q = (Linklist)malloc(sizeof(LNODE))))
+		{
+			return OVERFLOW;
+		}
+		/*q->key = Key[i];
+		q->num = i + 1;*/
+		p->next = q;
+		p = q;
+		scanf_s("%d", &(p->key));
+		p->num = i + 1;
+	}
+	p->next = Lh;
+	joseph(p, m, N, max);
+	return 0;
+}
+四．调试分析
+1.由于一开始未能看到题目条件而直接定义了测试量导致后来需要修改程序，今后要先看题目在开始思考编程。
+五．用户手册
+1.按屏幕提示输入报数上限的初值m；
+2.运行，按屏幕提示输入人数n；
+3.按屏幕提示依次输入第一个人到第n个人的key；
+4.回车显示n个人的出列顺序；
+5.Press any key to continue, 退出。
+六．测试结果
+输入人数：7
+输入值m：20
+请一次输入各位密码：3，1，7，2，4，8，4
+6->1->4->7->2->3->5
+七．附录
+#include<stdio.h>
+#include<stdlib.h>
