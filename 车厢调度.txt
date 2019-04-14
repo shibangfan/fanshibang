@@ -1,0 +1,126 @@
+﻿// ConsoleApplication41.cpp : 此文件包含 "main" 函数。程序执行将在此处开始并结束。
+//
+
+#include "pch.h"
+#include<stdio.h>
+#include<stdlib.h>
+
+int final;
+int total = 0;
+
+typedef struct
+{
+	int *base;
+	int *top;
+	int size;
+}sqs;
+
+int Inits(sqs *s)
+{
+	s->base = (int*)malloc(final * sizeof(int));
+	if (!s->base) exit(0);
+	s->top = s->base;
+	s->size = final;
+}
+
+void Push(sqs *s, int e)
+{
+	*(s->top)++ = e;
+}
+
+int Pop(sqs *s)
+{
+	if (s->top == s->base)
+	{
+		return 0;
+	}
+	else
+	{
+		return *(--(s->top));
+	}
+}
+
+int Empty(sqs *s)
+{
+	if (s->top == s->base)
+	{
+		return 1;
+	}
+	else
+	{
+		return 0;
+	}
+}
+
+int Fulls(sqs *s)
+{
+	if (s->top - s->base == final)
+	{
+		return 1;
+	}
+	else
+	{
+		return 0;
+	}
+}
+
+void Print(sqs s)
+{
+	int *p;
+	p = s.base;
+	printf("\t[%d]:", total);
+	for (; p != s.top; )
+	{
+		printf("%d", *p++);
+	}
+	printf("\n");
+}
+
+void search(sqs *input, sqs *temp, sqs *output)
+{
+	if (!Empty(input))
+	{
+		Push(temp, Pop(input));
+		search(input, temp, output);
+		Push(input, Pop(temp));
+	}
+	if (!Empty(temp))
+	{
+		Push(output, Pop(temp));
+		search(input, temp, output);
+		Push(temp, Pop(output));
+	}
+	if (Fulls(output))
+	{
+		total++;
+		Print(*output);
+	} 
+}
+
+void main()
+{
+	sqs input, temp, output;
+	int i;
+	printf("请输入车厢长度:\n");
+	scanf_s("%d", &final);
+	printf("车厢序列为:\n");
+	Inits(&input);
+	Inits(&temp);
+	Inits(&output);
+	for (i = final; i >= 1; i--)
+	{
+		Push(&input, i);
+	}
+	search(&input, &temp, &output);
+}
+
+// 运行程序: Ctrl + F5 或调试 >“开始执行(不调试)”菜单
+// 调试程序: F5 或调试 >“开始调试”菜单
+
+// 入门提示: 
+//   1. 使用解决方案资源管理器窗口添加/管理文件
+//   2. 使用团队资源管理器窗口连接到源代码管理
+//   3. 使用输出窗口查看生成输出和其他消息
+//   4. 使用错误列表窗口查看错误
+//   5. 转到“项目”>“添加新项”以创建新的代码文件，或转到“项目”>“添加现有项”以将现有代码文件添加到项目
+//   6. 将来，若要再次打开此项目，请转到“文件”>“打开”>“项目”并选择 .sln 文件
